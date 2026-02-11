@@ -3,38 +3,49 @@ using UnityEngine;
 
 public class Camera : MonoBehaviour
 {
-    public GameObject player;
-    private Vector3 offset1 = new Vector3(0, 5, -7);
-    private Vector3 offset2 = new Vector3(0, 2, 1);
+    // X key
+    public GameObject camera2;
+    // Z key
+    public GameObject camera1;
+    // c key
+    public GameObject camera3;
+    // v key
+    public GameObject camera4;
 
-    private Boolean XisActive;
-    private Boolean ZisActive;
     private void Start()
     {
-        XisActive = true;
-}
+
+        camera1.SetActive(true);
+    }
     void LateUpdate()
     {
-
-        if (Input.GetKey(KeyCode.Z))
-        {
-            XisActive = false;
-            ZisActive = true;
-        }
         if (Input.GetKey(KeyCode.X))
         {
-            ZisActive = false;
-            XisActive = true;
+            camera1.SetActive(false);
+            camera3.SetActive(false);
+            camera4.SetActive(false);
+            camera2.SetActive(true);
         }
-
-        if (XisActive == true)
+        if (Input.GetKey(KeyCode.Z))
         {
-            transform.position = player.transform.position + offset1;
+            camera2.SetActive(false);
+            camera3.SetActive(false);
+            camera4.SetActive(false);
+            camera1.SetActive(true);
         }
-
-        if (ZisActive == true)
+        if (Input.GetKey(KeyCode.C))
         {
-            transform.position = player.transform.position + offset2;
+            camera1.SetActive(false);
+            camera2.SetActive(false);
+            camera4.SetActive(false);  
+            camera3.SetActive(true);
+        }
+        if (Input.GetKey(KeyCode.V))
+            {
+            camera1.SetActive(false);
+            camera2.SetActive(false);
+            camera3.SetActive(false);
+            camera4.SetActive(true);
         }
     }
 }
