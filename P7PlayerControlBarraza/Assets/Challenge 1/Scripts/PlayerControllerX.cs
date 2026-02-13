@@ -4,48 +4,60 @@ using UnityEngine;
 
 public class PlayerControllerX : MonoBehaviour
 {
-    public float speed;
-    public float rotationSpeed;
+    public float speed = 15f;
+    public float rotationSpeed = 100f;
     public float verticalInput;
     public float horizontalInput;
 
     public GameObject player;
     public GameObject propeller;
-    public bool engineon;
+    public bool engineon = false;
 
-    // Start is called before the first frame update
-    void Start()
+    private Rigidbody body;
+
+    private void Start()
     {
+        body = player.GetComponent<Rigidbody>();
+    }
+
+    void FixedUpdate()
+    {
+        verticalInput = Input.GetAxis("Vertical");
+
         if (Input.GetKey(KeyCode.E))
         {
             if (engineon == true)
             {
                 engineon = false;
+                body.isKinematic = false;
+                body.useGravity = true;
             }
-            else engineon = true;
+        }
+            if (Input.GetKey(KeyCode.Q))
+            {
+                if (engineon == false)
+                {
+                    engineon = true;
+                body.useGravity = false;
+                body.isKinematic = true;
+                }
+            }
+
+            if (engineon == true)
+                player.transform.Translate(Vector3.forward * speed * Time.deltaTime);
+
+
+            if (Input.GetKey(KeyCode.UpArrow))
+                if (engineon == true)
+                    player.transform.Rotate(-Vector3.right * rotationSpeed * Time.deltaTime * verticalInput);
+                else return;
+            if (Input.GetKey(KeyCode.DownArrow))
+                if (engineon == true)
+                    player.transform.Rotate(Vector3.right * rotationSpeed * Time.deltaTime * -verticalInput);
+                else return;
+            if (engineon == true)
+            {
+                propeller.transform.Rotate(Vector3.forward * rotationSpeed);
+            }
         }
     }
-    void FixedUpdate()
-    {
-        // get the user's vertical input
-        verticalInput = Input.GetAxis("Vertical");
-
-        if (engineon == true)
-            player.transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        else return;
-
-        if (Input.GetKey(KeyCode.UpArrow))
-            if (engineon == true)
-                player.transform.Rotate(-Vector3.right * rotationSpeed * Time.deltaTime * verticalInput);
-            else return;
-        if (Input.GetKey(KeyCode.DownArrow))
-            if (engineon == true)
-                player.transform.Rotate(Vector3.right * rotationSpeed * Time.deltaTime * -verticalInput);
-            else return;
-        if (engineon)
-        {
-            propeller.transform.Rotate(Vector3.forward * rotationSpeed);
-        }
-    }
-}
-
